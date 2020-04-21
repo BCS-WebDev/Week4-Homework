@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <!-- bootstrap css -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+
+    <body class="h-100" style="max-width: 960px">
+        <header class="pt-2 px-2 pt-sm-2 px-sm-2 pt-md-2 px-sm-2" style="height: 25px; visibility: visible">
+            <h6 class="float-left">
+                View Highscores
+            </h6>
+            
+            <div class="inline-block float-right">
+                <h6 >Time: &nbsp;
+                    <div class="float-right" id="#timer">75</div>
+                </h6>
+            </div>
+        </header>
+
+        <main class="container p-0 mt-5 p-sm-0 mt-sm-5 p-md-0 mt-md-5 w-100" id="#mainDisplay"
+            style="height: 350px; max-width: 500px">
+            
+            <section class="col-12" id="#intro" style="display: content">
+                <div class="col-12">
+                    <div class="row mb-2 mb-sm-2 mb-md-2 justify-content-center">
+                        <h4 class="font-weight-bold">Coding Quiz Challenge</h4>
+                    </div>
+
+                    <div class="row mb-2 mb-sm-2 mb-md-2 justify-content-center">
+                        <p class="text-center">
+                            Try to answer the following code-related questions within the time limit.
+                            Keep in mind that incorrect answers will penalize your scoretime by ten seconds!
+                        </p>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <button type="button" class="btn btn-info">Start Quiz</button>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="col-12" id="#quiz" style="display: none">
+                <div class="col-12">
+                    <div class="row mb-2 mb-sm-2 mb-md-2" data-question-Index="0">
+                        <h5 class="font-weight-bold" id="#question">Commonly used data Types DO NOT include:</h5>
+                    </div>
+
+                    <div class="row mb-2 mb-sm-2 mb-md-2">
+                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="1">1: strings</button>
+                    </div>
+
+                    <div class="row mb-2 mb-sm-2 mb-md-2">
+                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="2">2: booleans</button>
+                    </div>  
+
+                    <div class="row mb-2 mb-sm-2 mb-md-2">
+                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="3">3: alerts</button>
+                    </div>
+
+                    <div class="row mb-2 mb-sm-2 mb-md-2">
+                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="4">4: numbers</button>
+                    </div>
+
+                    <div class="row">
+                        <hr class="w-100 my-1 my-sm-1 my-md-1">
+                        <p class="text-black-50" id="#answerConfirm">Correct!</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="col-12" id="#result" style="display: none">
+                <div class="col-12">
+                    <div class="row mb-2 mb-sm-2 mb-md-2">
+                        <h4 class="font-weight-bold">All done!</h4>
+                    </div>
+
+                    <div class="row mb-1 mb-sm-1 mb-md-1">
+                        <p>You final score is&nbsp; 
+                            <div class="float-right" id="#score">75</div>.
+                        </p>
+                    </div>
+
+                    <div class="row mb-1 mb-sm-1 mb-md-1">
+                        <p class="mt-1 mt-sm-1 mt-md-1">Enter initials: &nbsp;
+                            <div class="w-75 input-group input-group-sm float-right">
+                                <input type="text" class="form-control" id="#initials">
+                                <button type="button" class="btn btn-sm btn-info" id="#submit" style="height: 31px">Submit</button>
+                            </div>
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="col-12" id="#highscores" style="display: none">
+                <div class="col-12">
+                    <div class="row mb-2 mb-sm-2 mb-md-2">
+                        <h4 class="font-weight-bold">Highscores</h4>
+                    </div>
+
+                    <div class="row mb-3 mb-sm-3 mb-md-3" id="#scoreboard">
+                        <p class="mb-1 mb-sm-1 mb-md-1 w-100 bg-light text-dark" style="height: 25px">1. KC - 22</p>
+                        <p class="mb-1 mb-sm-1 mb-md-1 w-100 bg-light text-dark" style="height: 25px">2. KC - 21</p>
+                    </div>
+
+                    <div class="row mb-2 mb-sm-2 mb-md-2">
+                        <button type="button" class="mr-2 mr-sm-2 mr-md-2 btn btn-sm btn-info" data-action="back">Go Back</button>
+                        <button type="button" class="btn btn-sm btn-info" data-action="clear">Clear Highscores</button>
+                    </div>
+
+                </div>
+            </section>
+            
+        </main>
+        
+        <script src="Develop/script.js"></script>
+    </body>
+
+</html>
