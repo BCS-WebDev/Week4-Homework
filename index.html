@@ -13,9 +13,13 @@
     <!-- responsive body for xs, sm, md viewports -->
     <body class="h-100" style="max-width: 960px">
         <!-- header
+            - visibility 'visible' header on load
             - visibility to be changed to 'none' when viewing highscores -->
         <header class="pt-2 px-2 pt-sm-2 px-sm-2 pt-md-2 px-sm-2" style="height: 25px; visibility: visible">
-            <!-- h6 element to show highscores on 'click' -->
+            <!-- h6 element to show highscores on 'click
+                - if (isIntro), display 'none' intro, call highscores
+                - if (isQuiz), pause timer, display 'none' quiz, call highscores
+                - if (isResult), display 'none' result, call highscores -->
             <h6 class="float-left" id="#viewHighscores">
                 View Highscores
             </h6>
@@ -24,12 +28,14 @@
             <div class="inline-block float-right">
                 <h6 >Time: &nbsp;
                     <!-- Time in seconds remaining
-                        - will start counting down when quiz starts
+                        - will start counting down when quiz called
                         - deduct 15 from count for incorrect answers
                         - initially 75
-                        - when time hits 0
+                        - when time <= 0 or quiz questions completed = 10
+                            - if timer < 0, set timer to 0
                             - isQuiz = false
-                            - display 'none' quiz section, display 'content' result section -->
+                            - stop timer
+                            - display 'none' quiz section, call result -->
                     <div class="float-right" id="#timer">
                         75
                     </div>
@@ -43,9 +49,7 @@
         <main class="container p-0 mt-5 p-sm-0 mt-sm-5 p-md-0 mt-md-5 w-100" style="height: 350px; max-width: 500px">
             <!-- intro section
                 - isIntro = true (for view highscores case from intro section)
-                - isQuiz = false
-                - isResult = false
-                - displayed on load, display 'none' on start quiz -->
+                - display 'content' -->
             <section class="col-12" id="#intro" style="display: content">
                 <!-- responsive container for content margin alignment -->
                 <div class="col-12">
@@ -64,9 +68,7 @@
 
                     <!-- button to start quiz
                         - isIntro = false
-                        - change intro section display to 'none'
-                        - change quiz section display to 'content' 
-                        - start timer -->
+                        - display 'none' intro section, call quiz -->
                     <div class="row justify-content-center">
                         <button type="button" class="btn btn-info">Start Quiz</button>
                     </div>
@@ -76,9 +78,9 @@
 
             <!-- quiz section
                 - isQuiz = true (for highscore case from quiz section)
-                - display 'none' on load changed to 'content' on quiz start
-                - display 'none' when timer hits 0
-                - use event bubbling for answer buttons -->
+                - display 'content' on quiz call
+                - start or resume timer
+                - display 'none' on load, use event bubbling for answer buttons -->
             <section class="col-12" id="#quiz" style="display: none">
                 <!-- responsive container for content margin alignment -->
                 <div class="col-12">
@@ -96,10 +98,9 @@
                         - fill random answers text with false answer array, then replace answer index with correct answer
                         - use event bubbling on quiz section
                         - use data answer index and check against answers in questions & answers array
-                        - change quiz question & answer choices when answer is chosen, until timer = 0 or question answered = 10
+                        - change quiz question & answer choices when answer is chosen
                             - display content on answer confirm below with correct or incorrect
-                            - if incorrect, subtract 15 from timer
-                            - if question answered = 10, display 'none', display 'content' result -->
+                            - if incorrect, subtract 15 from timer -->
                     <div class="row mb-2 mb-sm-2 mb-md-2">
                         <button type="button" class="btn btn-sm btn-info" data-answer-Index="1">
                             <!-- example answer - 1: strings -->
@@ -128,8 +129,8 @@
                         - when answer is chosen
                             - if correct, change answer confirm text to correct & display parent 'content'
                             - if incorrect, change answer confirm text to incorrect & display parent 'content'
-                            - parent display content, set timer (1s), parent display 'none' when timer hits 0 -->
-                    <div class="row" style="display: none">
+                            - parent display content, parent visibility 'visible', parent visibility 'hidden' after (1s) -->
+                    <div class="row" style="visibility: hidden">
                         <hr class="w-100 my-1 my-sm-1 my-md-1">
                         <p class="text-black-50" id="#answerConfirm">
                             <!-- Correct! or Incorrect! -->
@@ -140,8 +141,7 @@
             </section>
 
             <!-- result section
-                - isQuiz = false, isResult = true (for highscore case from result section)
-                - when timer hits 0 or quiz is completed, display 'none' quiz
+                - isResult = true (for highscore case from result section before submitting)
                 - display 'content' result section -->
             <section class="col-12" id="#result" style="display: none">
                 <!-- responsive container for content margin alignment -->
@@ -168,8 +168,10 @@
                                 <!-- input form for initials -->
                                 <input type="text" class="form-control" id="#initials">
                                 <!-- submit button
+                                    - isResult = false
+                                    - refresh = true (to reload highscores scoreboard)
                                     - add initials & score (initials: "KC", score: 22) pair to array in local storage
-                                    - display 'none' result section, display 'content' highscores section -->
+                                    - display 'none' result section, call highscores -->
                                 <button type="button" class="btn btn-sm btn-info" id="#submit" style="height: 31px">Submit</button>
                             </div>
                         </p>
@@ -180,16 +182,10 @@
             </section>
 
             <!-- highscores section
-                - visibility 'hidden' header
                 - use event bubbling for buttons
-                - when score & initials submitted on result section,
-                    - display 'content', display 'none' result section
-                - view highscores button clicked
-                    - if clicked at intro section (isIntro == true)
-                        - display 'content', display 'none' intro section
-                    - if clicked during quiz (isQuiz == true)
-                        - pause timer
-                        - display 'content', display 'none' quiz section -->
+                - when called
+                    - visibility 'hidden' header
+                    - display 'content' -->
             <section class="col-12" id="#highscores" style="display: none">
                 <!-- responsive container for content margin alignment -->
                 <div class="col-12">
@@ -199,9 +195,11 @@
                     </div>
 
                     <!-- scoreboard
-                        - get initals & scores array
-                        - list by highest to lowest scores
-                            - if empty or null, leave empty -->
+                        - if (refresh == true), (true on start)
+                            - set refresh = false
+                            - get initals & scores array
+                            - list by highest to lowest scores
+                                - if empty or null, leave empty -->
                     <div class="row mb-3 mb-sm-3 mb-md-3" id="#scoreboard">
                         <!-- example highscores
                         <p class="mb-1 mb-sm-1 mb-md-1 w-100 bg-light text-dark" style="height: 25px">1. KC - 22</p>
@@ -212,17 +210,18 @@
                     <!-- highscore buttons
                         - use event bubbling on highscores section -->
                     <div class="row mb-2 mb-sm-2 mb-md-2">
-                        <!-- button to go back to intro section
-                            - display 'none' highscores section, display 'content' intro section
-                            - visibility 'visible' header
-                            - reset timer to 75
-                            - if isQuiz == true
-                                - display 'none', display 'content' quiz section
-                                - resume timer & quiz -->
+                        <!-- button to go back to previous section
+                            - default functionality
+                                - display 'none' highscores section, call intro
+                            - if (isQuiz == true)
+                                - display 'none' highscores section, call quiz
+                            - if (isResult == true) 
+                                - display 'none' highscores section, call result-->
                         <button type="button" class="mr-2 mr-sm-2 mr-md-2 btn btn-sm btn-info" data-action="back">Go Back</button>
                         <!-- button to clear highscores
                             - get initials & scores array, clear array
-                            - clear scoreboard (remove elements) -->
+                            - refresh = true
+                            - call highscores -->
                         <button type="button" class="btn btn-sm btn-info" data-action="clear">Clear Highscores</button>
                     </div>
 
