@@ -18,7 +18,7 @@
         <header class="pt-2 px-2 pt-sm-2 px-sm-2 pt-md-2 px-sm-2" style="height: 25px; visibility: visible">
             <!-- h6 element to show highscores on 'click
                 - if (isIntro), display 'none' intro, call highscores
-                - if (isQuiz), pause timer, display 'none' quiz, call highscores
+                - if (isQuiz), pause timer, subtract 5 from quiz time left, display 'none' quiz, call highscores
                 - if (isResult), display 'none' result, call highscores -->
             <h6 class="float-left" id="#viewHighscores">
                 View Highscores
@@ -31,10 +31,10 @@
                         - will start counting down when quiz called
                         - deduct 15 from count for incorrect answers
                         - initially 75
-                        - when time <= 0 or quiz questions completed = 10
+                        - when time <= 0 , quiz questions completed = 10, or paused
+                            - stop timer
                             - if timer < 0, set timer to 0
                             - isQuiz = false
-                            - stop timer
                             - display 'none' quiz section, call result -->
                     <div class="float-right" id="#timer">
                         75
@@ -70,7 +70,7 @@
                         - isIntro = false
                         - display 'none' intro section, call quiz -->
                     <div class="row justify-content-center">
-                        <button type="button" class="btn btn-info">Start Quiz</button>
+                        <button type="button" class="btn btn-info" id="#startQuiz">Start Quiz</button>
                     </div>
 
                 </div>
@@ -78,6 +78,7 @@
 
             <!-- quiz section
                 - isQuiz = true (for highscore case from quiz section)
+                - if returning to quiz from highscores, check quiz time left for next action
                 - display 'content' on quiz call
                 - start or resume timer
                 - display 'none' on load, use event bubbling for answer buttons -->
@@ -86,7 +87,7 @@
                 <div class="col-12">
                     <!-- quiz question container
                         - pick random question
-                        - use [questions, answer index, & answers] array to display question
+                        - use [questions & answers] array to display question
                         - change question when question answered (correct or incorrect) -->
                     <div class="row mb-2 mb-sm-2 mb-md-2">
                         <h5 class="font-weight-bold" id="#question">
@@ -95,32 +96,32 @@
                     </div>
 
                     <!-- answer choices
-                        - fill random answers text with false answer array, then replace answer index with correct answer
+                        - fill random answers text with false answer array, then replace random answer with correct answer
                         - use event bubbling on quiz section
-                        - use data answer index and check against answers in questions & answers array
+                        - use data and check against answers in questions & answers array
                         - change quiz question & answer choices when answer is chosen
                             - display content on answer confirm below with correct or incorrect
-                            - if incorrect, subtract 15 from timer -->
+                            - if incorrect, subtract 10 from timer -->
                     <div class="row mb-2 mb-sm-2 mb-md-2">
-                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="1">
+                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="0">
                             <!-- example answer - 1: strings -->
                         </button>
                     </div>
 
                     <div class="row mb-2 mb-sm-2 mb-md-2">
-                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="2">
+                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="1">
                             <!-- example answer - 2: booleans -->
                         </button>
                     </div>  
 
                     <div class="row mb-2 mb-sm-2 mb-md-2">
-                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="3">
+                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="2">
                             <!-- example answer - 3: alerts -->
                         </button>
                     </div>
 
                     <div class="row mb-2 mb-sm-2 mb-md-2">
-                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="4">
+                        <button type="button" class="btn btn-sm btn-info" data-answer-Index="3">
                             <!-- example answer - 4: numbers -->
                         </button>
                     </div>
@@ -157,7 +158,7 @@
                         <p>You final score is&nbsp; 
                             <div class="float-right" id="#score">
                                 <!-- insert score here - 75 -->
-                            </div>
+                            </div>. <!-- period -->
                         </p>
                     </div>
 
@@ -210,7 +211,9 @@
                     <!-- highscore buttons
                         - use event bubbling on highscores section -->
                     <div class="row mb-2 mb-sm-2 mb-md-2">
+                        <hr class="w-100">
                         <!-- button to go back to previous section
+                            - visibility 'visible' header
                             - default functionality
                                 - display 'none' highscores section, call intro
                             - if (isQuiz == true)
