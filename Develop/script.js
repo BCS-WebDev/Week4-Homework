@@ -17,8 +17,9 @@ viewHighscores.addEventListener("click", function(event) {
     event.preventDefault();
 
     if (isQuiz) {
-        clearTimeout(quizCountdown);
+        clearInterval(quizCountdown);
         quizTimeLeft -= 5;
+        quizTimer.textContent = quizTimeLeft;
         document.getElementById("#quiz").style.display = "none";
     } else if (isResult) {
         document.getElementById("#result").style.display = "none";
@@ -37,7 +38,7 @@ startQuiz.addEventListener("click", function(event) {
     isIntro = false;
     document.getElementById("#intro").style.display = "none";
 
-    tempQuestionsAndAnswers = questionsAndAnswers;
+    tempQuestionsAndAnswers = questionsAndAnswers.slice(0);
     quizQuestionsCompleted = 0;
     callQuiz();
 });
@@ -54,19 +55,19 @@ function callHighscores() {
     header.style.visibility = "hidden";
 
     if (refreshScoreboard) {
-        var initialsAndScores = JSON.parse(localStorage.getItem("highscores"));
-        if (initialsAndScores !== "null") {
+        while (scoreboard.firstChild) {
+            scoreboard.removeChild(scoreboard.lastChild);
+        }
+
+        var tempInitialsAndScores = JSON.parse(localStorage.getItem("highscores"));
+        if (tempInitialsAndScores !== null) {
+            initialsAndScores = tempInitialsAndScores;
             for (var i = 0; i < initialsAndScores.length; i++) {
                 var initialsToAdd = document.createElement("p");
                 initialsToAdd.className = "mb-1 mb-sm-1 mb-md-1 w-100 bg-light text-dark";
                 initialsToAdd.style.height = "25px";
-                initialsToAdd.textContent = (i + 1) + ". " + initialsAndScores[i].initials;
+                initialsToAdd.textContent = (i + 1) + ". " + initialsAndScores[i].initials + " - " + initialsAndScores[i].score; 
                 document.getElementById("#scoreboard").appendChild(initialsToAdd);
-
-                var scoreToAdd = document.createElement("span");
-                scoreToAdd.style.textAlign = "right";
-                scoreToAdd.textContent = initialsAndScores[i].score;
-                initialsToAdd.appendChild(scoreToAdd);
             }
         }
 
@@ -76,7 +77,7 @@ function callHighscores() {
     document.getElementById("#highscores").style.display = "contents";
 }
 
-// Go Back Button
+// Go Back & Clear Highscores Button
 var goBack = document.getElementById("#highscores");
 goBack.addEventListener("click", function(event) {
     event.preventDefault();
@@ -96,6 +97,7 @@ goBack.addEventListener("click", function(event) {
         refreshScoreboard = true;
         initialsAndScores = [];
         localStorage.setItem("highscores", JSON.stringify(initialsAndScores));
+
         callHighscores();
     }
 });
@@ -119,7 +121,10 @@ submit.addEventListener("click", function(event) {
         initialsToAdd = initialsToAdd.substring(0, 10);
     }
 
-    initialsAndScores = JSON.parse(localStorage.getItem("highscores"));
+    var tempInitialsAndScores = JSON.parse(localStorage.getItem("highscores"));
+    if (tempInitialsAndScores !== null) {
+        initialsAndScores = tempInitialsAndScores;
+    }
     initialsAndScores.push({ initials: initialsToAdd, score: quizTimeLeft });
 
     initialsAndScores.sort(function(a, b) {   // sort by initials first
@@ -135,7 +140,7 @@ submit.addEventListener("click", function(event) {
         }
     });
     initialsAndScores.sort(function (a, b) {   // then sort by score
-        return a.score - b.score;
+        return b.score - a.score;
     });
     localStorage.setItem("highscores", JSON.stringify(initialsAndScores));
 
@@ -166,15 +171,17 @@ function exitQuiz() {
 function callQuiz() {
     isQuiz = true;
     if (quizTimeLeft <= 0) {
+        clearInterval(quizCountdown);
         exitQuiz();
         return;
     }
 
-    quizCountdown = setTimeout(       
+    quizCountdown = setInterval(       
         function() {
-            if (quizTimeLeft <= 0) {
+            if (quizTimeLeft == 0) {
+                clearInterval(quizCountdown);
                 exitQuiz();
-                clearTimeout(quizCountdown);
+                return;
             }
             
             quizTimeLeft--;
@@ -192,7 +199,31 @@ function callQuiz() {
 var quizQuestion = document.getElementById("#question");
 var answerChoices = document.querySelectorAll('[data-answer-Index]');
 var quizQuestionsCompleted = 0;
-var questionsAndAnswers = [{ question: "Dog", answer: "yes" }];    // { question: "", answer: "" }
+var questionsAndAnswers = [     // { question: "", answer: "" }
+    { question: "Dog", answer: "yes" },
+    { question: "Cat", answer: "yes" },
+    { question: "Bird", answer: "yes" },
+    { question: "Fish", answer: "yes" },
+    { question: "Snake", answer: "yes" },
+    { question: "Spider", answer: "yes" },
+    { question: "Reptile", answer: "yes" },
+    { question: "Insect", answer: "yes" },
+    { question: "Shark", answer: "yes" },
+    { question: "Bees", answer: "yes" },
+    { question: "Octopus", answer: "yes" },
+    { question: "Whale", answer: "yes" },
+    { question: "Eagle", answer: "yes" },
+    { question: "Giraffe", answer: "yes" },
+    { question: "Lion", answer: "yes" },
+    { question: "Cow", answer: "yes" },
+    { question: "Pig", answer: "yes" },
+    { question: "Chicken", answer: "yes" },
+    { question: "Sheep", answer: "yes" },
+    { question: "Rabbit", answer: "yes" },
+    { question: "Seal", answer: "yes" },
+    { question: "Lobster", answer: "yes" },
+    { question: "Crab", answer: "yes" }
+];   
 var wrongAnswers = ["no", "no", "no", "no"];
 var tempQuestionsAndAnswers;    // reset to questionsAndAnswer at callIntro()
 var currentQuestionAndAnswer;   // currently chosen question and answer
@@ -200,7 +231,7 @@ var currentRightAnswerIndex;     // current right answer index
 
 // Display Question & Answer Choices
 function displayQuestionAndAnswers() {
-    var tempWrongAnswers = wrongAnswers;
+    var tempWrongAnswers = wrongAnswers.slice(0);
     for(var i = 0; i < 4; i++) {
         var randomWrongAnswerIndex = Math.floor(Math.random() * tempWrongAnswers.length);
         answerChoices[i].textContent = (i + 1) + ". " + tempWrongAnswers.splice(randomWrongAnswerIndex, 1);
@@ -208,33 +239,39 @@ function displayQuestionAndAnswers() {
 
     var randomQAIndex = Math.floor(Math.random() * tempQuestionsAndAnswers.length);
     currentQuestionAndAnswer = tempQuestionsAndAnswers.splice(randomQAIndex, 1);
-    quizQuestion.textContent = currentQuestionAndAnswer.question;
+    quizQuestion.textContent = currentQuestionAndAnswer[0].question;
 
     currentRightAnswerIndex = Math.floor(Math.random() * answerChoices.length);
-    answerChoices[currentRightAnswerIndex].textContent = (i + 1) + ". " + currentQuestionAndAnswer.answer;
+    answerChoices[currentRightAnswerIndex].textContent = (currentRightAnswerIndex + 1) + ". " + currentQuestionAndAnswer[0].answer;
 }
 
 // Answer Choices Buttons
 var quiz = document.getElementById("#quiz");
+var answerConfirmCountdown;
+var answerConfirm = document.getElementById("#answerConfirm");
+
 quiz.addEventListener("click", function(event) {
     event.preventDefault();
+    clearInterval(answerConfirmCountdown);
 
     quizQuestionsCompleted++;
-    var answerConfirm = document.getElementById("#answerConfirm");
     if (event.target.getAttribute("data-answer-Index") == currentRightAnswerIndex) {
         answerConfirm.textContent = "Correct!";
     } else {
         answerConfirm.textContent = "Incorrect!";
         quizTimeLeft -= 10;
+        quizTimer.textContent = quizTimeLeft;
     }
     answerConfirm.parentElement.style.visibility = "visible";
 
     var answerConfirmTime = 1;   // initially 1
-    var answerConfirmCountdown = setTimeout(       
+    answerConfirmCountdown = setInterval(       
         function() {
             if (answerConfirmTime <= 0) {
                 answerConfirm.parentElement.style.visibility = "hidden";
-                clearTimeout(answerConfirmCountdown);
+                clearInterval(answerConfirmCountdown);
+
+                return;
             }
 
             answerConfirmTime--;
@@ -243,7 +280,7 @@ quiz.addEventListener("click", function(event) {
     );
 
     if (quizTimeLeft <= 0 || quizQuestionsCompleted == 10) {
-        clearTimeout(quizCountdown);
+        clearInterval(quizCountdown);
         exitQuiz();
     } else {
         displayQuestionAndAnswers();
