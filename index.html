@@ -30,14 +30,13 @@
                     <!-- Time in seconds remaining
                         - will start counting down when quiz called
                         - deduct 15 from count for incorrect answers
-                        - initially 75
                         - when time <= 0 , quiz questions completed = 10, or paused
                             - stop timer
                             - if timer < 0, set timer to 0
                             - isQuiz = false
                             - display 'none' quiz section, call result -->
                     <div class="float-right" id="#timer">
-                        75
+                        75  <!-- initially 75 -->
                     </div>
                 </h6>
             </div>
@@ -55,14 +54,15 @@
                 <div class="col-12">
                     <!-- center content for intro title -->
                     <div class="row mb-2 mb-sm-2 mb-md-2 justify-content-center">
-                        <h4 class="font-weight-bold">Coding Quiz Challenge</h4>
+                        <h4 class="font-weight-bold">What Does The Fox Say!</h4>
                     </div>
 
                     <!-- center content for intro description -->
                     <div class="row mb-2 mb-sm-2 mb-md-2 justify-content-center">
                         <p class="text-center">
-                            Try to answer the following code-related questions within the time limit.
-                            Keep in mind that incorrect answers will penalize your scoretime by ten seconds!
+                            Try to match the correct animal sounds within the time limit.
+                            Incorrect answers will penalize your scoretime by ten full seconds!
+                            P.s. Dont cheat. You've been warned!
                         </p>
                     </div>
 
@@ -155,7 +155,7 @@
                     <!-- final score displayed
                         - score is remaining time left on timer -->
                     <div class="row mb-1 mb-sm-1 mb-md-1">
-                        <p>You final score is&nbsp; 
+                        <p>Your final score is&nbsp; 
                             <div class="float-right" id="#score">
                                 <!-- insert score here - 75 -->
                             </div>. <!-- period -->
