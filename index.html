@@ -18,7 +18,7 @@
         <header class="pt-2 px-2 pt-sm-2 px-sm-2 pt-md-2 px-sm-2" style="height: 25px; visibility: visible">
             <!-- h6 element to show highscores on 'click
                 - if (isIntro), display 'none' intro, call highscores
-                - if (isQuiz), pause timer, subtract 5 from quiz time left, display 'none' quiz, call highscores
+                - if (isQuiz), pause timer, subtract 7 from quiz time left, display 'none' quiz, call highscores
                 - if (isResult), display 'none' result, call highscores -->
             <h6 class="float-left" id="#viewHighscores">
                 View Highscores
@@ -45,11 +45,11 @@
         <!-- main container
             - responsive body for xs, sm, md viewports
             - all section displays are organized into functions -->
-        <main class="container p-0 mt-5 p-sm-0 mt-sm-5 p-md-0 mt-md-5 w-100" style="height: 350px; max-width: 500px">
+        <main class="container px-3 mt-5 px-sm-2 mt-sm-5 px-md-2 mt-md-5 w-100" style="height: 350px; max-width: 500px">
             <!-- intro section
                 - isIntro = true (for view highscores case from intro section)
                 - display 'content' -->
-            <section class="col-12" id="#intro" style="display: content">
+            <section class="col-12" id="#intro" style="display: contents">
                 <!-- responsive container for content margin alignment -->
                 <div class="col-12">
                     <!-- center content for intro title -->
@@ -62,7 +62,7 @@
                         <p class="text-center">
                             Try to match the correct animal sounds within the time limit.
                             Incorrect answers will penalize your scoretime by ten full seconds!
-                            P.s. Dont cheat. You've been warned!
+                            P.S. Dont cheat. You've been warned!
                         </p>
                     </div>
 

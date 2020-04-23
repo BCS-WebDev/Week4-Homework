@@ -1,4 +1,24 @@
 
+/////////////////////// HUD ////////////////////////
+var viewHighscores = document.getElementById("#viewHighscores");    // View Highscores Button
+
+viewHighscores.addEventListener("click", function(event) {    // add click event to view highscores
+    event.preventDefault();    // prevent default click functionality
+
+    if (isQuiz) {      // if called from quiz section
+        clearInterval(quizCountdown);     // stop timer
+        quizTimeLeft -= 7;               // subtract from time for penalty
+        quizTimer.textContent = quizTimeLeft;     // update timer
+        document.getElementById("#quiz").style.display = "none";    // remove quiz section
+    } else if (isResult) {     // if called from result section
+        document.getElementById("#result").style.display = "none";  // remove result section
+    } else if (isIntro) {      // if called from intro section
+        document.getElementById("#intro").style.display = "none";     // remove intro section
+    }
+
+    callHighscores();    // call highscores section
+});
+
 /////////////////////// Intro ////////////////////////
 var isIntro = true;
 
@@ -10,25 +30,6 @@ function callIntro() {
 
     document.getElementById("#intro").style.display = "contents";    // display intro section
 }
-
-// View Highscores Button
-var viewHighscores = document.getElementById("#viewHighscores");    // get highscores element
-viewHighscores.addEventListener("click", function(event) {    // add click event to view highscores
-    event.preventDefault();    // prevent default click functionality
-
-    if (isQuiz) {      // if called from quiz section
-        clearInterval(quizCountdown);     // stop timer
-        quizTimeLeft -= 5;               // subtract from time for penalty
-        quizTimer.textContent = quizTimeLeft;     // update timer
-        document.getElementById("#quiz").style.display = "none";    // remove quiz section
-    } else if (isResult) {     // if called from result section
-        document.getElementById("#result").style.display = "none";  // remove result section
-    } else if (isIntro) {      // if called from intro section
-        document.getElementById("#intro").style.display = "none";     // remove intro section
-    }
-
-    callHighscores();    // call highscores section
-});
 
 // Start Quiz Button
 var startQuiz = document.getElementById("#startQuiz");    // get start quiz button
@@ -104,57 +105,6 @@ highscores.addEventListener("click", function(event) {      // add click event f
 });
 
 
-/////////////////////// Result ////////////////////////
-var isResult = false;     // initially false
-
-// Call Result
-function callResult() {
-    isResult = true;    // isIntro needed for view highscores case from intro 
-    document.getElementById("#score").textContent = quizTimeLeft;    // set score to time left on timer
-    document.getElementById("#result").style.display = "contents";   // display result section
-}
-
-// Submit Initials & Score Button
-var submit = document.getElementById("#submit");   // get submit button
-submit.addEventListener("click", function(event) {    // add click event
-    var initialsToAdd = document.getElementById("#initials").value;     // get input value from initials input field
-    if (initialsToAdd.length > 10) {
-        initialsToAdd = initialsToAdd.substring(0, 10);    // if input value longer than 10, take first 10 characters
-    } else if (initialsToAdd.length == 0) {
-        initialsToAdd = "Anon";       // if input value empty, set to anonymous
-    }
-
-    var tempInitialsAndScores = JSON.parse(localStorage.getItem("highscores"));   // get highscores array item from local storage
-    if (tempInitialsAndScores !== null) {   
-        initialsAndScores = tempInitialsAndScores;   // if item exists, set to initials and scores array
-    }
-    initialsAndScores.push({ initials: initialsToAdd, score: quizTimeLeft });   // push object with initials & score
-
-    initialsAndScores.sort(function(a, b) {   // sort array alphabetically by initials first
-        var nameA = a.initials.toLowerCase(); 
-        var nameB = b.initials.toLowerCase(); 
-
-        if (nameA < nameB) {
-            return -1;
-        } else if (nameA > nameB) {
-            return 1;
-        } else {
-            return 0;
-        }
-    });
-    initialsAndScores.sort(function (a, b) {   // then sort by score (highest to lowest)
-        return b.score - a.score;
-    });
-    localStorage.setItem("highscores", JSON.stringify(initialsAndScores));   // store highscores array in localstorage
-
-    isResult = false;    // exiting result section so set to false
-    refreshScoreboard = true;   // scoreboard needs refreshing
-    document.getElementById("#result").style.display = "none";   // remove result section
-    
-    callHighscores();   // call highscores
-});
-
-
 /////////////////////// Timer /////////////////////////
 var quizCountdown;   // global scope to clear interval from different functions
                     // cases & subsequent action delegated due to delay in main timer detecting changes
@@ -205,41 +155,41 @@ var quizQuestion = document.getElementById("#question");   // get question eleme
 var answerChoices = document.querySelectorAll('[data-answer-Index]');   // get all elements with data-answer-Index property
 var quizQuestionsCompleted = 0;         // one of quiz end conditions (== 10), initially 0
 var questionsAndAnswers = [              // questions & answers
-    { question: "Badger:", answer: "Growl" },   // { question: "", answer: "" }
-    { question: "Bat:", answer: "Screech" },
-    { question: "Crow:", answer: "Caw caw" },
-    { question: "Cat:", answer: "Meow" },
-    { question: "Fox", answer: "Ring-ding-ding-ding-dingeringeding!" },
-    { question: "Cat:", answer: "Purr" },
-    { question: "Horse:", answer: "Neigh" },
-    { question: "Duck:", answer: "Quack" },
-    { question: "Fox", answer: "Jacha-chacha-chacha-chow!" },
-    { question: "Frog:", answer: "Ribbit" },
-    { question: "Dog:", answer: "Woof" },
-    { question: "Wolf:", answer: "Awoo" },
-    { question: "Fox", answer: "Wa-pa-pa-pa-pa-pa-pow!" },
-    { question: "Birds:", answer: "Chirp" },
-    { question: "Cow:", answer: "Moo" },
+    { question: "Badger:", answer: "Growl!" },   // { question: "", answer: "" }
+    { question: "Bat:", answer: "Screech!" },
+    { question: "Crow:", answer: "Caw caw!" },
+    { question: "Cat:", answer: "Meow!" },
+    { question: "Fox:", answer: "Ring-ding-ding-ding-dingeringeding!" },
+    { question: "Cat:", answer: "Purr!" },
+    { question: "Horse:", answer: "Neigh!" },
+    { question: "Duck:", answer: "Quack!" },
+    { question: "Fox:", answer: "Jacha-chacha-chacha-chow!" },
+    { question: "Frog:", answer: "Ribbit!" },
+    { question: "Dog:", answer: "Woof!" },
+    { question: "Wolf:", answer: "Awoo!" },
+    { question: "Fox:", answer: "Wa-pa-pa-pa-pa-pa-pow!" },
+    { question: "Birds:", answer: "Chirp!" },
+    { question: "Cow:", answer: "Moo!" },
     { question: "Human:", answer: "Hey, what's up?" },
-    { question: "Fox", answer: "Fraka-kaka-kaka-kaka-kow!" },
-    { question: "Turkey:", answer: "Gobble gobble" },
-    { question: "Pidgeon:", answer: "Coo" },
-    { question: "Snake", answer: "Hiss" },
-    { question: "Fox", answer: "Hatee-hatee-hatee-ho!" },
-    { question: "Pig", answer: "Oink" },
-    { question: "Chicken (Female)", answer: "Bah-gawk" },
-    { question: "Chicken (Male)", answer: "Cock-a-doodle-doo" },
-    { question: "Fox", answer: "A-hee-ahee ha-hee!" },
-    { question: "Sheep", answer: "Baa" },
-    { question: "Parrot", answer: "Polly want a cracker" },
-    { question: "Seal", answer: "Arf" },
-    { question: "Owl", answer: "Hoot" },
-    { question: "Fox", answer: "Joff-tchoff-tchoffo-tchoffo-tchoff!" }
+    { question: "Fox:", answer: "Fraka-kaka-kaka-kaka-kow!" },
+    { question: "Turkey:", answer: "Gobble gobble!" },
+    { question: "Pidgeon:", answer: "Coo!" },
+    { question: "Snake:", answer: "Hiss!" },
+    { question: "Fox:", answer: "Hatee-hatee-hatee-ho!" },
+    { question: "Pig:", answer: "Oink!" },
+    { question: "Hen:", answer: "Bah-gawk!" },
+    { question: "Rooster:", answer: "Cock-a-doodle-doo!" },
+    { question: "Fox:", answer: "A-hee-ahee ha-hee!" },
+    { question: "Sheep:", answer: "Baa!" },
+    { question: "Parrot:", answer: "Polly want a cracker!" },
+    { question: "Seal:", answer: "Arf!" },
+    { question: "Owl:", answer: "Hoot!" },
+    { question: "Fox:", answer: "Joff-tchoff-tchoffo-tchoffo-tchoff!" }
 ];   
-var wrongAnswers = ["Bellow", "Trill", "Squeal", "Squeak", "Buzz", "Nicker", "Dook", "Bleat",    // wrong answers array
-                        "Bugle", "Hee haw", "Snort", "Growl", "Roar", "Snarl", "Low", "Pipe",
-                        "Click", "Bray", "Trumpet", "Honk", "Chatter", "Cough", "Scream", "Grunt",
-                        "Munch", "Crunch", "Sing", "Groan", "Grumble"];
+var wrongAnswers = ["Bellow!", "Trill!", "Squeal!", "Squeak!", "Buzz!", "Nicker!", "Dook!", "Bleat!",    // wrong answers array
+                        "Bugle!", "Hee haw!", "Snort!", "Growl!", "Roar!", "Snarl!", "Low!", "Pipe!",
+                        "Click!", "Bray!", "Trumpet!", "Honk!", "Chatter!", "Cough!", "Scream!", "Grunt!",
+                        "Munch!", "Crunch!", "Sing!", "Groan!", "Grumble!"];
 var tempQuestionsAndAnswers;    // reset to questionsAndAnswer at callIntro()
 var currentQuestionAndAnswer;   // currently chosen question and answer
 var currentRightAnswerIndex;     // current right answer index
@@ -302,4 +252,56 @@ quiz.addEventListener("click", function(event) {    // quiz event bubbling
     } else {
         displayQuestionAndAnswers();    // if not, display next question
     }
+});
+
+
+/////////////////////// Result ////////////////////////
+var isResult = false;     // initially false
+
+// Call Result
+function callResult() {
+    isResult = true;    // isIntro needed for view highscores case from intro 
+    document.getElementById("#score").textContent = quizTimeLeft;    // set score to time left on timer
+    document.getElementById("#result").style.display = "contents";   // display result section
+}
+
+// Submit Initials & Score Button
+var submit = document.getElementById("#submit");   // get submit button
+submit.addEventListener("click", function(event) {    // add click event
+    var initialsToAdd = document.getElementById("#initials").value;     // get input value from initials input field
+    if (initialsToAdd.length > 10) {
+        initialsToAdd = initialsToAdd.substring(0, 10);    // if input value longer than 10, take first 10 characters
+    } else if (initialsToAdd.length == 0) {
+        initialsToAdd = "Anon";       // if input value empty, set to anonymous
+    }
+
+    var tempInitialsAndScores = JSON.parse(localStorage.getItem("highscores"));   // get highscores array item from local storage
+    if (tempInitialsAndScores !== null) {   
+        initialsAndScores = tempInitialsAndScores;   // if item exists, set to initials and scores array
+    }
+    initialsAndScores.push({ initials: initialsToAdd, score: quizTimeLeft });   // push object with initials & score
+
+    initialsAndScores.sort(function(a, b) {   // sort array alphabetically by initials first
+        var nameA = a.initials.toLowerCase(); 
+        var nameB = b.initials.toLowerCase(); 
+
+        if (nameA < nameB) {
+            return -1;
+        } else if (nameA > nameB) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+    initialsAndScores.sort(function (a, b) {   // then sort by score (highest to lowest)
+        return b.score - a.score;
+    });
+    localStorage.setItem("highscores", JSON.stringify(initialsAndScores));   // store highscores array in localstorage
+
+    isResult = false;    // exiting result section so set to false
+    refreshScoreboard = true;   // scoreboard needs refreshing
+    document.getElementById("#initials").value = "";
+    document.getElementById("#result").style.display = "none";   // remove result section
+    
+    callHighscores();   // call highscores
 });
