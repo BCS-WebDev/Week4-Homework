@@ -1,7 +1,7 @@
-# Week4-Homework
+# Quiz Development
 BootCampSpot Web Development - Week 4 Homework
 
-# Notes on Quiz Development
+## Notes on Quiz Development
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A Quiz is a game of sorts. A simple game but
 one that requires a cyclical pathway nonetheless. Every game needs a starting point,
 which could be an introductory page, the game itself, to which an intro has access,
@@ -17,7 +17,7 @@ game need to be accounted for. Furthermore, when considering more features can b
 added, the actions that create the main loop have to be delegated systematically
 so as to facilitate the process and minimize overlap.
 
-# Motive & Action
+## Motive & Action
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In this particular case, the quiz is divided
 into five sections: a persistent HUD, an intro, the quiz, the result page, and the
 highscores page. The HUD displays a timer and a button to view the highscores while
