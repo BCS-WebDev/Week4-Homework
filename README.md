@@ -1,7 +1,7 @@
 # Quiz Development
 BootCampSpot Web Development - Week 4 Homework
 
-![Preview}(https://github.com/BCS-WebDev/Week4-Homework/blob/master/Assets/Quiz-min.gif)
+![Preview](https://github.com/BCS-WebDev/Week4-Homework/blob/master/Assets/Quiz-min.gif)
 
 ## Notes on Quiz Development
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A Quiz is a game of sorts. A simple game but
